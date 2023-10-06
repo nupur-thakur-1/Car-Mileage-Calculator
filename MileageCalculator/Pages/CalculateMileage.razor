@@ -1,0 +1,62 @@
+﻿@page "/calculatemileage"
+
+<h3>Mileage and Gas Expenditure Calculator</h3>
+
+<div class="form-group">
+    <label for="initialOdometer">Initial Odometer Reading (in miles):</label>
+    <input class="form-control" type="number" id="initialOdometer" @bind="initialOdometer" />
+</div>
+
+<div class="form-group">
+    <label for="finalOdometer">Final Odometer Reading (in miles):</label>
+    <input class="form-control" type="number" id="finalOdometer" @bind="finalOdometer" />
+</div>
+
+<div class="form-group">
+    <label for="fuelPurchased">Amount of Fuel Purchased (in gallons):</label>
+    <input class="form-control" type="number" id="fuelPurchased" @bind="fuelPurchased" />
+</div>
+
+<div class="form-group">
+    <label for="fuelPrice">Fuel Price per Gallon (in USD):</label>
+    <input class="form-control" type="number" id="fuelPrice" @bind="fuelPrice" />
+</div>
+
+<button class="btn btn-primary" @onclick="Calculate">Calculate</button>
+
+@if (showResults)
+{
+    <div class="mt-4">
+        <h4>Results:</h4>
+        <p>Mileage: @mileage MPG</p>
+        <p>Gas Expenditure: $@gasExpenditure</p>
+    </div>
+}
+
+@code {
+    private double initialOdometer;
+    private double finalOdometer;
+    private double fuelPurchased;
+    private double fuelPrice;
+    private bool showResults;
+    private double mileage;
+    private double gasExpenditure;
+
+    private void Calculate()
+    {
+        mileage = MileageCalculate(initialOdometer, finalOdometer, fuelPurchased);
+        gasExpenditure = CalculateGasExpenditure(fuelPurchased, fuelPrice);
+        showResults = true;
+    }
+
+    private double MileageCalculate(double initialOdometer, double finalOdometer, double fuelPurchased)
+    {
+        double milesDriven = finalOdometer - initialOdometer;
+        return milesDriven / fuelPurchased;
+    }
+
+    private double CalculateGasExpenditure(double fuelPurchased, double fuelPrice)
+    {
+        return fuelPurchased * fuelPrice;
+    }
+}
